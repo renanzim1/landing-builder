@@ -5,6 +5,7 @@
 html,
 body {
   margin: 0;
+  padding: 0;
   background: #f7f7f8;
   color: #171719;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system,
@@ -15,6 +16,10 @@ button,
 input {
   font: inherit;
 }
+
+/* =========================
+   ÁREA PRINCIPAL
+========================= */
 
 .shell {
   max-width: 1040px;
@@ -49,6 +54,10 @@ input {
 .modal p {
   color: #71717a;
 }
+
+/* =========================
+   UPLOAD
+========================= */
 
 .drop {
   border: 1.5px dashed #c7c7cc;
@@ -92,6 +101,10 @@ input {
   margin-top: 13px;
 }
 
+/* =========================
+   WORKSPACE
+========================= */
+
 .workspace {
   margin-top: 34px;
 }
@@ -119,6 +132,10 @@ input {
   color: #71717a;
   margin-top: 16px;
 }
+
+/* =========================
+   BLOCOS
+========================= */
 
 .block {
   display: grid;
@@ -208,6 +225,14 @@ input {
   color: #52525b;
 }
 
+.secondary {
+  font-weight: 700;
+}
+
+/* =========================
+   BARRA INFERIOR
+========================= */
+
 .bottomBar {
   position: fixed;
   bottom: 16px;
@@ -234,6 +259,10 @@ input {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* =========================
+   MODAL
+========================= */
 
 .modalBackdrop {
   position: fixed;
@@ -279,15 +308,16 @@ input {
   margin-top: 22px;
 }
 
-/* ==============================
+/* =====================================================
    PRÉ-VISUALIZAÇÃO
-   ============================== */
+===================================================== */
 
 .preview {
   position: fixed;
   inset: 0;
   background: #111;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   z-index: 20;
 }
 
@@ -295,7 +325,7 @@ input {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(20, 20, 20, 0.92);
+  background: rgba(20, 20, 20, 0.94);
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -308,159 +338,239 @@ input {
   background: #fff;
 }
 
-/*
-  Container da landing.
+/* =====================================================
+   LANDING GERADA
+===================================================== */
 
-  No celular ocupa toda a largura.
-  Em telas maiores fica centralizado.
-*/
 .site {
+  position: relative;
+
   width: min(100%, 760px);
+  max-width: 760px;
+
   margin: 0 auto;
   padding: 0;
+
   background: #111;
+
   min-height: 100%;
-  overflow: hidden;
-  line-height: 0;
-}
 
-/* ==============================
-   BLOCOS DE IMAGEM E VÍDEO
-   ============================== */
-
-.mediaSection {
-  position: relative;
-  display: block;
-  width: 100%;
-  line-height: 0;
-  font-size: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: #111;
+  overflow-x: hidden;
 }
 
 /*
-  IMPORTANTE:
-  A imagem é sempre mostrada inteira.
+  Cada bloco permanece com a proporção
+  original da imagem.
 
   Não usamos altura fixa.
   Não usamos object-fit: cover.
-  Isso evita cortar a arte.
+  Portanto a arte não é cortada.
 */
+
+.mediaSection {
+  position: relative;
+
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  line-height: 0;
+
+  overflow: visible;
+
+  background: transparent;
+
+  isolation: isolate;
+}
+
+/*
+  PEQUENA SOBREPOSIÇÃO
+
+  Evita linhas/gaps causados pelo
+  arredondamento de pixels entre imagens.
+*/
+
+.mediaSection + .mediaSection {
+  margin-top: -4px;
+}
+
+/* =====================================================
+   IMAGENS
+===================================================== */
+
 .mediaSection > img {
   position: relative;
-  z-index: 1;
+
   display: block;
+
   width: 100%;
   max-width: 100%;
+
   height: auto;
+
   margin: 0;
   padding: 0;
+
   border: 0;
-  object-fit: contain;
+  outline: 0;
+
   vertical-align: bottom;
-}
 
-/*
-  Vídeo segue a mesma largura da landing
-  e mantém sua proporção original.
-*/
-.mediaSection > video {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  margin: 0;
-  padding: 0;
-  border: 0;
   object-fit: contain;
-  vertical-align: bottom;
-  background: #000;
+
+  transform: translateZ(0) scale(1.002);
+
+  transform-origin: center center;
+
+  backface-visibility: hidden;
+
+  -webkit-backface-visibility: hidden;
 }
 
 /*
-  Remove microfrestas que alguns navegadores
-  podem criar entre duas seções consecutivas.
+  Cria uma transição extremamente pequena
+  na parte inferior de cada seção.
+
+  Isso suaviza visualmente a emenda sem
+  esconder partes importantes da arte.
 */
-.mediaSection + .mediaSection {
-  margin-top: -1px;
-}
 
-/*
-  EMENDA SUAVE
-
-  Cria apenas uma pequena transição visual
-  na região onde uma arte encontra a próxima.
-
-  A imagem continua inteira.
-*/
 .mediaSection:not(:last-child)::after {
   content: "";
+
   position: absolute;
-  z-index: 3;
+
   left: 0;
   right: 0;
-  bottom: -10px;
-  height: 20px;
+  bottom: -4px;
+
+  height: 8px;
+
+  z-index: 3;
+
   pointer-events: none;
 
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.025) 35%,
-    rgba(0, 0, 0, 0.045) 50%,
-    rgba(0, 0, 0, 0.025) 65%,
+    rgba(0, 0, 0, 0.025),
     rgba(0, 0, 0, 0)
   );
 }
 
-/* ==============================
-   BOTÃO SOBRE A ARTE
-   ============================== */
+/* =====================================================
+   VÍDEOS
+===================================================== */
+
+.mediaSection > video {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  vertical-align: bottom;
+
+  object-fit: contain;
+
+  background: #000;
+
+  transform: translateZ(0);
+}
+
+/* =====================================================
+   BOTÃO CTA
+===================================================== */
 
 .cta {
   position: absolute;
-  z-index: 10;
+
   left: 50%;
   bottom: 6%;
+
   transform: translateX(-50%);
+
+  z-index: 10;
+
   line-height: 1.2;
-  font-size: 16px;
+
   text-decoration: none;
+
   background: #fff;
   color: #111;
+
   border-radius: 999px;
+
   padding: 14px 22px;
+
   font-weight: 850;
+
   white-space: nowrap;
+
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
 }
 
-/* ==============================
+/* =====================================================
    CARROSSEL
-   ============================== */
+===================================================== */
 
 .carousel {
   position: relative;
 }
 
+.carousel > img {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  object-fit: contain;
+
+  vertical-align: bottom;
+
+  transform: translateZ(0) scale(1.002);
+
+  transform-origin: center;
+}
+
 .carousel .prev,
 .carousel .next {
   position: absolute;
-  z-index: 12;
+
   top: 50%;
+
   transform: translateY(-50%);
+
   width: 42px;
   height: 42px;
+
   border: 0;
+
   border-radius: 50%;
+
   background: rgba(255, 255, 255, 0.85);
+
   font-size: 30px;
+
   line-height: 1;
+
   cursor: pointer;
+
+  z-index: 12;
 }
 
 .carousel .prev {
@@ -473,20 +583,29 @@ input {
 
 .dots {
   position: absolute;
-  z-index: 12;
+
   bottom: 18px;
   left: 50%;
+
   transform: translateX(-50%);
+
   display: flex;
+
   gap: 6px;
+
+  z-index: 12;
 }
 
 .dots button {
   width: 7px;
   height: 7px;
+
   padding: 0;
+
   border: 0;
+
   border-radius: 50%;
+
   background: rgba(255, 255, 255, 0.55);
 }
 
@@ -498,15 +617,31 @@ input {
   bottom: 7%;
 }
 
-.secondary {
-  font-weight: 700;
+/* =====================================================
+   REMOVE ESPAÇAMENTOS ACIDENTAIS
+===================================================== */
+
+.site section {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
-/* ==============================
+.site img,
+.site video {
+  font-size: 0;
+}
+
+.site > * {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* =====================================================
    CELULAR
-   ============================== */
+===================================================== */
 
 @media (max-width: 720px) {
+
   .shell {
     padding: 24px 14px 100px;
   }
@@ -530,8 +665,11 @@ input {
 
   .actions {
     grid-column: 1 / -1;
+
     justify-content: flex-start;
+
     border-top: 1px solid #eee;
+
     padding-top: 10px;
   }
 
@@ -552,31 +690,46 @@ input {
     Landing ocupa exatamente a largura
     disponível no celular.
   */
+
   .site {
     width: 100%;
-    max-width: 100%;
-  }
+    max-width: none;
 
-  .mediaSection > img,
-  .mediaSection > video {
-    width: 100%;
-    height: auto;
+    margin: 0;
+
+    padding: 0;
   }
 
   /*
-    Transição um pouco menor no celular
-    para não cobrir conteúdo da arte.
+    No celular aumentamos levemente
+    a sobreposição para evitar qualquer
+    linha entre duas imagens.
   */
-  .mediaSection:not(:last-child)::after {
-    bottom: -7px;
-    height: 14px;
+
+  .mediaSection + .mediaSection {
+    margin-top: -5px;
   }
 
-  .cta {
-    max-width: calc(100% - 32px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 14px;
-    padding: 12px 18px;
+  .mediaSection > img,
+  .mediaSection > video,
+  .carousel > img {
+    width: 100%;
+    max-width: none;
+
+    height: auto;
+
+    margin: 0;
+
+    padding: 0;
+  }
+
+  .mediaSection > img,
+  .carousel > img {
+    transform: translateZ(0) scale(1.003);
+  }
+
+  .mediaSection:not(:last-child)::after {
+    bottom: -5px;
+    height: 10px;
   }
 }
